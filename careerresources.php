@@ -51,6 +51,47 @@
 			</ul>
 			<button class="apply-button">Apply Now</button>
 		</section>
+		
+		<?php
+        // Include the database connection file
+       	include('conn/conn.php');
+
+        // Fetch job listings from the database
+        $sql = "SELECT * FROM job_openings";
+        $result = $conn->query($sql);
+
+        // Check if there are any job listings
+        if ($result->rowCount() > 0) {
+            // Loop through each job listing and display them
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                echo "<section class='job'>";
+                echo "<h3>{$row['job_title']}</h3>";
+                echo "<p class='description'>Job Description: {$row['job_description']}</p>";
+                echo "<p>Responsibilities:</p>";
+                echo "<ul>";
+                // Split responsibilities into array and display each as list item
+                $responsibilities = explode("\n", $row['responsibilities']);
+                foreach ($responsibilities as $resp) {
+                    echo "<li>{$resp}</li>";
+                }
+                echo "</ul>";
+                echo "<p>Salary: {$row['salary']}</p>";
+                echo "<p>Location: {$row['location']}</p>";
+                echo "<p>Requirements:</p>";
+                echo "<ul>";
+                // Split requirements into array and display each as list item
+                $requirements = explode("\n", $row['requirements']);
+                foreach ($requirements as $req) {
+                    echo "<li>{$req}</li>";
+                }
+                echo "</ul>";
+                echo "<button class='apply-button'>Apply Now</button>";
+                echo "</section>";
+            }
+        } else {
+            echo "<p>No job listings available.</p>";
+        }
+        ?>
 	</section>
 </body>
 </html>
